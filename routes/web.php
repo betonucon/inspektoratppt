@@ -32,10 +32,11 @@ use App\Http\Controllers\EvaluasiController;
 
 Route::post('/logout', [LoginController::class, 'logout']);
 Route::group(['middleware' => ['auth']], function () {
+    Route::get('/', [DashboardController::class, 'index']);
     Route::get('/Dashboard', [DashboardController::class, 'index']);
 });
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => 'auth'], function () {
     Route::prefix('master-data')->group(function () {
         Route::group(['prefix' => 'role'], function () {
             Route::get('/', [RoleController::class, 'index'])->name('role');
@@ -72,7 +73,7 @@ Route::group(['middleware' => ['auth']], function () {
         });
     });
 });
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => 'auth'], function () {
     Route::prefix('perencanaan')->group(function () {
         Route::group(['prefix' => 'pkpt'], function () {
             Route::get('/', [PkptController::class, 'index']);
@@ -113,7 +114,7 @@ Route::group(['middleware' => ['auth']], function () {
     });
 });
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => 'auth'], function () {
     Route::prefix('pelaksanaan')->group(function () {
         Route::group(['prefix' => 'kertas-kerja-pemeriksaan'], function () {
             Route::get('/', [KertasKerjaController::class, 'index']);
@@ -139,7 +140,7 @@ Route::group(['middleware' => ['auth']], function () {
     });
 });
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => 'auth'], function () {
     Route::prefix('pelaporan')->group(function () {
         Route::group(['prefix' => 'review'], function () {
             Route::get('/', [ReviewController::class, 'index']);
