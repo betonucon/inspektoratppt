@@ -357,7 +357,7 @@
     <!-- Modern colorpicker bundle -->
     <script src="{{url_plug()}}/assets/libs/@simonwep/pickr/pickr.min.js"></script>
     <script src="{{url_plug()}}/assets/libs/prismjs/prism.js"></script>
-    <script src="{{url_plug()}}/js/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="{{url_plug()}}/js/jquery-3.6.0.min.js"></script>
 
     <!--datatable js-->
     <script src="{{url_plug()}}/js/jquery.dataTables.min.js"></script>

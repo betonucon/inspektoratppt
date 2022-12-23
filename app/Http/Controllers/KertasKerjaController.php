@@ -8,7 +8,7 @@ use App\Models\KertasKerja;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\Auth;
-
+use ConvertApi\ConvertApi;
 class KertasKerjaController extends Controller
 {
     public function index()
@@ -86,12 +86,12 @@ class KertasKerjaController extends Controller
     public function store(Request $request)
     {
         error_reporting(0);
-
+        ConvertApi::setApiSecret('8hHtmz5CYPolhdvq');
         if ($request->id == null) {
 
             $request->validate([
                 'id_pkpt' => 'required',
-                'file' => 'required||mimes:pdf|max:2048',
+                'file' => 'required||mimes:xlsx|max:2048',
             ]);
 
             $data = [
@@ -101,18 +101,24 @@ class KertasKerjaController extends Controller
 
             if ($files = $request->file('file')) {
                 //insert new file
+                $namapkp=date('YmdHis') ;
                 $destinationPath = 'public/file_upload/'; // upload path
-                $profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
+                $profileImage = $namapkp. "." . $files->getClientOriginalExtension();
                 $files->move(public_path('/file_upload'), $profileImage);
                 $data['file'] = "$profileImage";
+
+                
             }
 
             KertasKerja::create($data);
-
+            $result = ConvertApi::convert('pdf', ['File' =>'public/file_upload/'.$namapkp.'.xlsx']);
+            $result->getFile()->save('public/file_upload/'.$namapkp.'.pdf');
             return response()->json([
                 'status' => 'success',
                 'message' => 'Data Berhasil Disimpan'
             ]);
+
+
         } else {
             $data = KertasKerja::where('id', $request->id)->first();
             $data->update([

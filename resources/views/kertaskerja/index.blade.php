@@ -71,8 +71,9 @@
 						<h5 class="modal-title" id="exampleModalLabelDefault">{{ $menu }}</h5>
 					</div>
 					<div class="modal-body">
-						<form id="form-data" enctype="multipart/form-data">
+						<form id="form-data" method="post" action="{{url('pelaksanaan/kertas-kerja-pemeriksaan/store')}}" enctype="multipart/form-data">
 							@csrf
+                            <input type="submit">
 							<div id="tampil-form"></div>
 						</form>
 					</div>
