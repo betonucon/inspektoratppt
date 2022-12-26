@@ -56,7 +56,7 @@ class KertasKerjaController extends Controller
                 return '<a href="javascript:;" onclick="tampil_detail(`'.$data->jenis.'`)">[PKPT'.$data['id_pkpt'].']'.substr($data->area_pengawasan,0,70).'...</a>';
             })
             ->addColumn('file', function ($data) {
-                $file='<img onclick="buka_file(`'.$data['file'].'`)" src="' . asset('public/img/pdf-file.png') . '" width="30px" height="30px">';
+                $file='<img onclick="buka_file(`'.$data['file_pdf'].'`)" src="' . asset('public/img/pdf-file.png') . '" width="30px" height="30px">';
                 return $file;
             })
             ->addColumn('status', function ($data) {
@@ -101,7 +101,7 @@ class KertasKerjaController extends Controller
 
             $request->validate([
                 'id_pkpt' => 'required',
-                'file' => 'required||mimes:xlsx|max:2048',
+                'file' => 'required||mimes:xlsx,xls|max:2048',
             ]);
 
             $data = [
@@ -116,6 +116,7 @@ class KertasKerjaController extends Controller
                 $profileImage = $namapkp. "." . $files->getClientOriginalExtension();
                 $files->move(public_path('/file_upload'), $profileImage);
                 $data['file'] = "$profileImage";
+                $data['file_pdf'] = $namapkp.'.pdf';
 
                 
             }
