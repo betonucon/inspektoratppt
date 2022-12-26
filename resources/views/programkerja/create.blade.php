@@ -10,7 +10,7 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-                <form id="form-data" enctype="multipart/form-data">
+                <form id="form-data" method="post" action="{{ url('perencanaan/program-kerja-pengawasan/store') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
                         <label class="form-label">PKPT</label>
@@ -91,6 +91,7 @@
 					<div class="modal-footer">
 						<button  class="btn btn-white" onclick="hide()">Tutup</button>
 						<button id="btn-refused"  class="btn btn-success">Simpan</button>
+                        
 					</div>
 				</div>
 			</div>

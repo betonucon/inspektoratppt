@@ -149,6 +149,12 @@ class ProgramKerjaController extends Controller
                     $btn=$selesai;
                 }
                 return $btn;
+            })
+            ->addColumn('pesan', function ($data) {
+                return $data->pesan;
+            })
+            ->rawColumns(['status', 'action', 'pkp', 'nota_dinas','area_pengawasannya'])
+            ->make(true);
                 // if ($roles == 2) {
                 //     if ($status == 0 || $status == 1) {
                 //         $btn ='
@@ -196,17 +202,6 @@ class ProgramKerjaController extends Controller
                 //     }
                 // }
                 
-                
-            })
-            ->addColumn('sts_keterangan', function ($data) {
-                $sts= Status::where('id',$data->status)->first();
-                return $sts->sts_keterangan;
-            })
-            ->addColumn('pesan', function ($data) {
-                return $data->pesan;
-            })
-            ->rawColumns(['status', 'action', 'pkp', 'nota_dinas','area_pengawasannya'])
-            ->make(true);
     }
 
     function tampiltable(Request $request){
@@ -224,8 +219,8 @@ class ProgramKerjaController extends Controller
         $request->validate([
             'id_pkpt' => 'required',
             'jenis' => 'required',
-            'pkp' => 'required|mimes:pdf|max:2048',
-            'nota_dinas' => 'required|mimes:pdf|max:2048',
+            'pkp' => 'required|mimes:pdf,xlsx|max:2048',
+            'nota_dinas' => 'required|mimes:pdf,xlsx|max:2048',
         ]);
 
         $data = [
@@ -239,10 +234,16 @@ class ProgramKerjaController extends Controller
             $destinationPath = 'public/file_upload/'; // upload path
             $profileImage =$namapkp. "." . $files->getClientOriginalExtension();
             $files->move(public_path('/file_upload'), $profileImage);
-            $data['pkp'] = "$profileImage";
-
-            $result = ConvertApi::convert('pdf', ['File' => $files]);
-            $result->getFile()->save('public/file_upload/'.$namapkp.'.pdf');
+            $ext=explode('.',$profileImage);
+            if($ext[1]=='xlsx'){
+                $data['pkp'] = "$namapkp.pdf";
+                // ProgramKerja::create($data);
+                $result = ConvertApi::convert('pdf', ['File' =>'public/file_upload/'.$namapkp.'.xlsx']);
+                $pdf=$result->getFile()->save('public/file_upload/'.$namapkp.'.pdf');
+            }else{
+                $data['pkp'] = $profileImage;
+                // ProgramKerja::create($data);
+            }
         }
 
         if ($files = $request->file('nota_dinas')) {
@@ -250,14 +251,22 @@ class ProgramKerjaController extends Controller
             $destinationPath = 'public/file_upload/'; // upload path
             $profileImage = $namanot. "." . $files->getClientOriginalExtension();
             $files->move(public_path('/file_upload'), $profileImage);
-            $data['nota_dinas'] = "$profileImage";
+            $ext=explode('.',$profileImage);
+            if($ext[1]=='xlsx'){
+                $data['nota_dinas'] = "$namanot.pdf";
+                // ProgramKerja::create($data);
+                $result = ConvertApi::convert('pdf', ['File' =>'public/file_upload/'.$namanot.'.xlsx']);
+                $pdf=$result->getFile()->save('public/file_upload/'.$namanot.'.pdf');
+            }else{
+                $data['nota_dinas'] = $profileImage;
+                // ProgramKerja::create($data);
+            }
 
-            $result = ConvertApi::convert('pdf', ['File' => $files]);
-            $result->getFile()->save('public/file_upload/'.$namapkp.'.pdf');
+            // $result = ConvertApi::convert('pdf', ['File' => $files]);
+            // $result->getFile()->save('public/file_upload/'.$namapkp.'.pdf');
         }
 
         ProgramKerja::create($data);
-
         return response()->json([
             'status' => 'success',
             'message' => 'Data Berhasil Disimpan'

@@ -52,9 +52,8 @@
                                                 <th>PKP</th>
                                                 <th>Nota Dinas</th>
                                                 <th>Status</th>
-                                                <th>Action</th>
-                                                <th>Status Keterangan</th>
                                                 <th>Pesan</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
 									</table>
@@ -189,9 +188,8 @@
                     { data: 'pkp' },
                     { data: 'nota_dinas' },
                     { data: 'status' },
-                    { data: 'action' },
-                    { data: 'sts_keterangan' },
                     { data: 'pesan' },
+                    { data: 'action' },
                 ],
                 language: {
                     paginate: {

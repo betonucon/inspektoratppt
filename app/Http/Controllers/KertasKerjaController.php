@@ -40,13 +40,18 @@ class KertasKerjaController extends Controller
     {
         error_reporting(0);
         $data = KertasKerja::orderBy('id', 'desc')->get();
-
+        
         return Datatables::of($data)
+            ->addColumn('jenis', function ($data) {
+                $pkpt = Pkpt::where('id', $data->id_pkpt)->first();
+                return $pkpt['jenis'];
+            })
             ->addColumn('id_pkpt', function ($data) {
-                return 'PKPT ' . $data['id_pkpt'];
+                $pkpt = Pkpt::where('id', $data->id_pkpt)->first();
+                return '<a href="javascript:;" onclick="tampil(`'.$pkpt->id_pkpt.'`)">'.substr($pkpt->area_pengawasan,0,50).'...</a>';
             })
             ->addColumn('file', function ($data) {
-                $file='<span class="btn btn-icon-only btn-outline-warning btn-sm mb-1" onclick="buka_file(`'.$data['file'].'`)"><center><img src="' . asset('public/img/pdf-file.png') . '" width="30px" height="30px"></center></span>';
+                $file='<span class="btn btn-icon-only btn-outline-warning btn-sm mb-1" onclick="buka_file(`'.$data['file'].'`)"><center><img src="' . asset('public/img/pdf-file.png') . '" width="10px" height="10px"></center></span>';
                 return $file;
             })
             ->addColumn('status', function ($data) {
@@ -79,7 +84,7 @@ class KertasKerjaController extends Controller
                 }
                 return $btn;
             })
-            ->rawColumns(['status', 'action','file'])
+            ->rawColumns(['status', 'action','file','id_pkpt'])
             ->make(true);
     }
 
@@ -105,18 +110,18 @@ class KertasKerjaController extends Controller
                 $destinationPath = 'public/file_upload/'; // upload path
                 $profileImage = $namapkp. "." . $files->getClientOriginalExtension();
                 $files->move(public_path('/file_upload'), $profileImage);
-                $data['file'] = "$profileImage";
+                $data['file'] = "$namapkp.pdf";
+                KertasKerja::create($data);
+                $result = ConvertApi::convert('pdf', ['File' =>'public/file_upload/'.$namapkp.'.xlsx']);
+                $pdf=$result->getFile()->save('public/file_upload/'.$namapkp.'.pdf');
 
                 
             }
-
-            KertasKerja::create($data);
-            $result = ConvertApi::convert('pdf', ['File' =>'public/file_upload/'.$namapkp.'.xlsx']);
-            $result->getFile()->save('public/file_upload/'.$namapkp.'.pdf');
             return response()->json([
                 'status' => 'success',
                 'message' => 'Data Berhasil Disimpan'
             ]);
+
 
 
         } else {

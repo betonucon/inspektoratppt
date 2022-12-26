@@ -45,6 +45,7 @@
                                         <thead>
                                             <tr>
                                                 <th width="1%" scope="col">No</th>
+                                                <th >jenis</th>
                                                 <th >PKPT</th>
                                                 <th >File</th>
                                                 <th >Status</th>
@@ -73,7 +74,7 @@
 					<div class="modal-body">
 						<form id="form-data" method="post" action="{{url('pelaksanaan/kertas-kerja-pemeriksaan/store')}}" enctype="multipart/form-data">
 							@csrf
-                            <input type="submit">
+                            
 							<div id="tampil-form"></div>
 						</form>
 					</div>
@@ -130,6 +131,7 @@
                        return meta.row + meta.settings._iDisplayStart + 1;
                    }
                },
+               { data: 'jenis' },
                { data: 'id_pkpt' },
                { data: 'file' },
                { data: 'status' },

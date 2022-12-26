@@ -42,7 +42,7 @@
 
                     <div class="mb-3">
                         <label class="form-label">Status Nilai</label>
-                        <input type="number" name="status_nilai" class="form-control" required>
+                        <input type="text" name="status_nilai" class="form-control" required>
                     </div>
 
                     <div class="mb-3">
