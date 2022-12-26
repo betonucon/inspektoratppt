@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Pkpt;
 use App\Models\Status;
 use App\Models\KertasKerja;
+use App\Models\Viewkertaskerja;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\Auth;
@@ -25,6 +26,12 @@ class KertasKerjaController extends Controller
         $data = KertasKerja::where('id', $request->id)->first();
         return view('kertaskerja.modal', compact('pkpt', 'data'));
     }
+    public function tampil_detail(Request $request)
+    {
+        error_reporting(0);
+        $data = Pkpt::where('jenis',$request->jenis)->orderBy('id','Asc')->get();
+        return view('kertaskerja.modaldetail', compact('data'));
+    }
 
     public function getJenisPengawasan(Request $request)
     {
@@ -39,14 +46,17 @@ class KertasKerjaController extends Controller
     public function getdata(Request $request)
     {
         error_reporting(0);
-        $data = KertasKerja::orderBy('id', 'desc')->get();
+        $data = Viewkertaskerja::orderBy('id', 'desc')->get();
 
         return Datatables::of($data)
             ->addColumn('id_pkpt', function ($data) {
                 return 'PKPT ' . $data['id_pkpt'];
             })
+            ->addColumn('text_area_pengawasan', function ($data) {
+                return '<a href="javascript:;" onclick="tampil_detail(`'.$data->jenis.'`)">[PKPT'.$data['id_pkpt'].']'.substr($data->area_pengawasan,0,70).'...</a>';
+            })
             ->addColumn('file', function ($data) {
-                $file='<span class="btn btn-icon-only btn-outline-warning btn-sm mb-1" onclick="buka_file(`'.$data['file'].'`)"><center><img src="' . asset('public/img/pdf-file.png') . '" width="30px" height="30px"></center></span>';
+                $file='<img onclick="buka_file(`'.$data['file'].'`)" src="' . asset('public/img/pdf-file.png') . '" width="30px" height="30px">';
                 return $file;
             })
             ->addColumn('status', function ($data) {
@@ -79,7 +89,7 @@ class KertasKerjaController extends Controller
                 }
                 return $btn;
             })
-            ->rawColumns(['status', 'action','file'])
+            ->rawColumns(['status', 'action','file','text_area_pengawasan'])
             ->make(true);
     }
 

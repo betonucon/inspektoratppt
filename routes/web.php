@@ -119,6 +119,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::group(['prefix' => 'kertas-kerja-pemeriksaan'], function () {
             Route::get('/', [KertasKerjaController::class, 'index']);
             Route::get('get-data', [KertasKerjaController::class, 'getdata']);
+            Route::get('detail', [KertasKerjaController::class, 'tampil_detail']);
             Route::get('get-jenis-pengawasan', [KertasKerjaController::class, 'getJenisPengawasan']);
             Route::get('modal', [KertasKerjaController::class, 'modal']);
             Route::post('store', [KertasKerjaController::class, 'store']);

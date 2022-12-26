@@ -1,5 +1,12 @@
 @extends('layouts.app')
-
+@push('style')
+    <style>
+         table.table-bordered.dataTable td {
+            border-bottom-width: 1px;
+            padding: 3px 10px;
+        }
+    </style>
+@endpush
 @section('content')
 
 <div class="page-content">
@@ -84,6 +91,21 @@
 				</div>
 			</div>
 		</div>
+		<div class="modal fade" id="modaldetail" role="dialog"  aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" ></h5>
+					</div>
+					<div class="modal-body">
+						<div id="tampil-detail"></div>
+					</div>
+					<div class="modal-footer">
+						<button  class="btn btn-white" onclick="hide_detail()">Tutup</button>
+					</div>
+				</div>
+			</div>
+		</div>
         <div class="modal fade" id="modalshow" role="dialog" aria-hidden="true">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
@@ -130,8 +152,8 @@
                        return meta.row + meta.settings._iDisplayStart + 1;
                    }
                },
-               { data: 'id_pkpt' },
-               { data: 'file' },
+               { data: 'text_area_pengawasan' },
+               { data: 'file'  ,className: "text-center"  },
                { data: 'status' },
                { data: 'action' },
            ],
@@ -187,9 +209,16 @@ $(document).ready(function() {
 		}
 
         function hide(){
-        $('#modalAdd').modal('hide');
+            $('#modalAdd').modal('hide');
         }
-
+        function tampil_detail(jenis){
+            $('#tampil-detail').load("{{url('pelaksanaan/kertas-kerja-pemeriksaan/detail')}}?jenis="+jenis);
+            $('#modaldetail .modal-title').text('Detail '+jenis);
+            $('#modaldetail').modal('show');
+        }
+        function hide_detail(){
+            $('#modaldetail').modal('hide');
+        }
         $('#btn-save').on('click', () => {
         var form=document.getElementById('form-data');
             $.ajax({
