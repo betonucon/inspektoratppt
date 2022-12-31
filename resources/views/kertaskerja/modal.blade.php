@@ -9,12 +9,12 @@
                         <select class="form-control"  name="id_pkpt"  id="id_pkpt" onchange="jenisPengawsan()">
                             <option value=""> --Pilih-- </option>
                             @foreach ($pkpt as $o)
-                            <option value="{{ $o->id }}" {{ $o->id == $data->id_pkpt ? 'selected' : '' }}>PKPT {{ $o->id }} </option>
+                            <option value="{{ $o->id }}" {{ $o->id == $data->id_pkpt ? 'selected' : '' }}>PKPT {{ $o->area_pengawasan }} </option>
                         @endforeach
                         </select>
                     </div>
                     @if ($data->id == null)
-                    <div class="mb-3">
+                    <div class="mb-3" hidden>
                         <label class="form-label">Jenis Pengawasan</label>
                         <input class="form-control" type="text" id="jenis_pengawasan" disabled>
                     </div>

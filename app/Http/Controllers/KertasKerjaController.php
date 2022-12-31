@@ -29,8 +29,9 @@ class KertasKerjaController extends Controller
     public function tampil_detail(Request $request)
     {
         error_reporting(0);
-        $data = Pkpt::where('jenis',$request->jenis)->orderBy('id','Asc')->get();
-        return view('kertaskerja.modaldetail', compact('data'));
+        $data = Pkpt::where('id',$request->id)->first();
+        $id=$data->id;
+        return view('kertaskerja.table', compact('data','id'));
     }
 
     public function getJenisPengawasan(Request $request)
@@ -55,7 +56,7 @@ class KertasKerjaController extends Controller
             })
             ->addColumn('id_pkpt', function ($data) {
                 $pkpt = Pkpt::where('id', $data->id_pkpt)->first();
-                return '<a href="javascript:;" onclick="tampil(`'.$pkpt->id_pkpt.'`)">'.substr($pkpt->area_pengawasan,0,50).'...</a>';
+                return '<a href="javascript:;" onclick="tampil('.$pkpt->id.')">'.substr($pkpt->area_pengawasan,0,50).'...</a>';
             })
             ->addColumn('text_area_pengawasan', function ($data) {
                 return '<a href="javascript:;" onclick="tampil_detail(`'.$data->jenis.'`)">[PKPT'.$data['id_pkpt'].']'.substr($data->area_pengawasan,0,70).'...</a>';
@@ -94,7 +95,7 @@ class KertasKerjaController extends Controller
                 }
                 return $btn;
             })
-            ->rawColumns(['status', 'action','file'])
+            ->rawColumns(['status', 'action','file','id_pkpt'])
             ->make(true);
     }
 
@@ -106,7 +107,7 @@ class KertasKerjaController extends Controller
 
             $request->validate([
                 'id_pkpt' => 'required',
-                'file' => 'required||mimes:xlsx,xls|max:2048',
+                'file' => 'required||mimes:pdf,xlsx,xls|max:2048',
             ]);
 
             $data = [
@@ -120,10 +121,13 @@ class KertasKerjaController extends Controller
                 $destinationPath = 'public/file_upload/'; // upload path
                 $profileImage = $namapkp. "." . $files->getClientOriginalExtension();
                 $files->move(public_path('/file_upload'), $profileImage);
-                $data['file'] = "$namapkp.pdf";
+                $ext=explode('.',$profileImage);
+                // dd($ext);
+                $data['file'] = $profileImage;
+                $data['ext'] = $ext[1];
                 KertasKerja::create($data);
-                $result = ConvertApi::convert('pdf', ['File' =>'public/file_upload/'.$namapkp.'.xlsx']);
-                $pdf=$result->getFile()->save('public/file_upload/'.$namapkp.'.pdf');
+                // $result = ConvertApi::convert('pdf', ['File' =>'public/file_upload/'.$namapkp.'.xlsx']);
+                // $pdf=$result->getFile()->save('public/file_upload/'.$namapkp.'.pdf');
 
                 
             }

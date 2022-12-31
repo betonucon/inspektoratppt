@@ -24,7 +24,9 @@ class ProgramKerjaController extends Controller
 
     public function getTable(Request $request)
     {
-        $data = Pkpt::where('jenis', $request->jenis)->get();
+        $count=HeaderPkpt::count();
+        $get= HeaderPkpt::where('id', $count)->first();
+        $data = Pkpt::where('jenis', $get->nomor_pkpt)->get();
 
         return Datatables::of($data)
             ->addColumn('id', function ($data) {
@@ -218,15 +220,15 @@ class ProgramKerjaController extends Controller
 
         $request->validate([
             'id_pkpt' => 'required',
-            'jenis' => 'required',
             'pkp' => 'required|mimes:pdf,xlsx|max:2048',
             'nota_dinas' => 'required|mimes:pdf,xlsx|max:2048',
         ]);
-
+        $count=HeaderPkpt::count();
+        $get= HeaderPkpt::where('id', $count)->first();
         $data = [
             'id_pkpt' => $request->id_pkpt,
-            'jenis' => $request->jenis,
-            'status' => 1,
+            'jenis' =>$get->nomor_pkpt,
+            'status' => 2,
         ];
 
         if ($files = $request->file('pkp')) {
@@ -346,7 +348,7 @@ class ProgramKerjaController extends Controller
         $data = ProgramKerja::where('id', $request->id)->first();
         $data->update([
             'pesan'=>$request->pesan,
-            'status' => 0,
+            'status' => 1,
         ]);
         // if ($data->status == 2) {
         //     $data->update([

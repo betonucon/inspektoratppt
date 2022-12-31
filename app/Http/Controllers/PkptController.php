@@ -2,20 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Imports\PkptImport;
+use App\Models\Pkpt;
 use App\Models\HeaderPkpt;
+use ConvertApi\ConvertApi;
+use App\Imports\PkptImport;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
-use App\Models\Pkpt;
+use Illuminate\Support\Facades\File;
 use Maatwebsite\Excel\Facades\Excel;
-use ConvertApi\ConvertApi;
+use Illuminate\Support\Facades\Response;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+
 class PkptController extends Controller
 {
     public function index()
     {
         $headermenu = 'Perencanaan';
         $menu = 'Penyusunan PKPT';
-        return view('pkpt.index', compact('headermenu', 'menu'));
+        $nopkpt=HeaderPkpt::all();
+        return view('pkpt.index', compact('headermenu', 'menu','nopkpt'));
     }
 
     public function getdata(Request $request)
@@ -88,6 +93,12 @@ class PkptController extends Controller
         return view('pkpt.modal', compact('data'));
     }
 
+    public function download(Request $request)
+    {
+        $data=HeaderPkpt::where('nomor_pkpt',$request->nomor_pkpt)->first();
+        return $data->file;
+    }
+
     public function import(Request $request)
     {
 
@@ -106,26 +117,42 @@ class PkptController extends Controller
 
         $filess = $request->file('file');
         $tahun = date('Y');
-
-        if ($request->id > 0) {
-            $jenis = $request->nomor_pkpt;
+        $nama_file = rand() . $filess->getClientOriginalName();
+        $filess->move('public/file_excel', $nama_file);
+        
+        $cek = HeaderPkpt::where('getClientOriginalName',$filess->getClientOriginalName())->count();
+        if ($cek>0) {
+            $mst = HeaderPkpt::where('getClientOriginalName',$filess->getClientOriginalName())->first();
+            $data = HeaderPkpt::where('getClientOriginalName',$filess->getClientOriginalName())->update([
+                'file' => $nama_file,
+                'getClientOriginalName' => $filess->getClientOriginalName(),
+            ]);
+            $jenis = $mst->nomor_pkpt;
             $hapus = Pkpt::where('jenis', $jenis)->delete();
+            Excel::import(new PkptImport($tahun, $jenis), public_path('/file_excel/' . $nama_file));
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Data Berhasil Diimport',
+            ]);
         } else {
 
             $jenis = nomor_pkpt();
             $data = HeaderPkpt::create([
                 'nomor_pkpt' => $jenis,
+                'file' => $nama_file,
+                'getClientOriginalName' => $filess->getClientOriginalName(),
+            ]);
+
+            Excel::import(new PkptImport($tahun, $jenis), public_path('/file_excel/' . $nama_file));
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Data Berhasil Diimport',
             ]);
         }
 
-        $nama_file = rand() . $filess->getClientOriginalName();
-        $filess->move('public/file_excel', $nama_file);
-        Excel::import(new PkptImport($tahun, $jenis), public_path('/file_excel/' . $nama_file));
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Data Berhasil Diimport',
-        ]);
+        
     }
 
     public function destroy(Request $request)

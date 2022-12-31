@@ -56,11 +56,7 @@
                                                 <th >PKPT</th>
                                                 <th >File</th>
                                                 <th >Status</th>
-                                                @if (Auth::user()['role_id']==6)
-                                                    <th width="5%" >Action</th>
-                                                @else
-                                                    <th width="5%" >Keterangan</th>
-                                                @endif
+                                                <th width="5%" >Action</th>
                                             </tr>
                                         </thead>
 									</table>
@@ -73,7 +69,7 @@
 		</div>
 
 		<div class="modal fade" id="modalAdd" role="dialog" aria-labelledby="exampleModalLabelDefault" aria-hidden="true">
-			<div class="modal-dialog">
+			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title" id="exampleModalLabelDefault">{{ $menu }}</h5>
@@ -130,6 +126,29 @@
 				</div>
 			</div>
 		</div>
+        <div class="modal fade" id="tampiltable" role="dialog" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabelDefault">{{ $menu }}</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close">
+						</button>
+					</div>
+					<div class="modal-body" style="max-height: calc(100vh - 210px);overflow-y: auto;">
+						<div id="error-notif"></div>
+						<form id="form-refused" enctype="multipart/form-data">
+							@csrf
+							<div id="tampil-table"></div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button  class="btn btn-white" onclick="hide()">Tutup</button>
+						<button id="btn-refused"  class="btn btn-success">Simpan</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 @endsection
@@ -153,6 +172,7 @@
                        return meta.row + meta.settings._iDisplayStart + 1;
                    }
                },
+               { data: 'jenis' },
                { data: 'id_pkpt' },
                { data: 'file' },
                { data: 'status' },
@@ -212,10 +232,17 @@ $(document).ready(function() {
         function hide(){
             $('#modalAdd').modal('hide');
         }
-        function tampil_detail(jenis){
-            $('#tampil-detail').load("{{url('pelaksanaan/kertas-kerja-pemeriksaan/detail')}}?jenis="+jenis);
-            $('#modaldetail .modal-title').text('Detail '+jenis);
-            $('#modaldetail').modal('show');
+        function tampil(id){
+            $('#btn-save').removeAttr('disabled','false');
+            $.ajax({
+                type: 'GET',
+                url: "{{url('pelaksanaan/kertas-kerja-pemeriksaan/detail')}}",
+                data: "id="+id,
+                success: function(msg){
+                    $('#tampil-table').html(msg);
+                    $('#tampiltable').modal('show');
+                }
+            });
         }
         function hide_detail(){
             $('#modaldetail').modal('hide');

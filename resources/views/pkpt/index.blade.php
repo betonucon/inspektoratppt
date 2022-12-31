@@ -28,6 +28,7 @@
                     <div class="col-sm-12 col-md-6">
                         {{-- <span class="js-upload-file-btn btn btn-sm btn-primary waves-effect waves-light "><i class="mdi mdi-plus-circle-outline"></i> Tambah</span> --}}
                         <span onclick="tambah(0)" class="btn btn-sm btn-success waves-effect waves-light "><i class="mdi mdi-plus-circle-outline"></i> Upload Excel</span>
+                        <span onclick="download()" class="btn btn-sm btn-primary waves-effect waves-light "><i class="mdi mdi-download"></i> Download Excel</span>
                         <span onclick="tambahNonPkpt()" class="btn btn-sm btn-warning waves-effect waves-light "><i class="mdi mdi-plus-circle-outline"></i> Non PKPT</span>
                     </div>
                     <div class="col-sm-12 col-md-6">
@@ -90,6 +91,37 @@
 					<div class="modal-footer">
 						<button  class="btn btn-white" onclick="hide()">Tutup</button>
 						<button id="btn-save"  class="btn btn-success">Simpan</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="download" role="dialog" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabelDefault">{{ $menu }}</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close">
+						</button>
+					</div>
+					<div class="modal-body">
+						<div id="error-notif"></div>
+						<form id="form-data" enctype="multipart/form-data">
+							@csrf
+                            <div class="mb-3">
+                                <label class="form-label">Nomor Pkpt</label>
+                                <select name="nomor_pkpt" id="nomor_pkpt" class="form-control">
+                                        <option value="">--Pilih--</option>
+                                        @foreach ($nopkpt as $i)
+                                        <option value="{{ $i->nomor_pkpt }}">{{ $i->nomor_pkpt }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </form>
+					</div>
+					<div class="modal-footer">
+						<button  class="btn btn-white" onclick="hide()">Tutup</button>
+						<span onclick="downloadexcell()"  class="btn btn-success">Simpan</span>
 					</div>
 				</div>
 			</div>
@@ -164,6 +196,36 @@
 					$('#tampil-form').html(msg);
 					$('#modalAdd').modal('show');
 
+				}
+			});
+		}
+
+		function download(){
+			// $('#btn-save').removeAttr('disabled','false');
+			$.ajax({
+				type: 'GET',
+				// url: "{{url('perencanaan/pkpt/modaldownload')}}",
+				// data: "id="+id,
+				success: function(msg){
+                    // window.open("{{ url('public/file_excell/936258045pkpt.xlsx') }}", '_blank');
+					// $('#tampil-form').html(msg);
+					$('#download').modal('show');
+
+				}
+			});
+		}
+
+		function downloadexcell(){
+			var nomor_pkpt=$('#nomor_pkpt').val();
+			$.ajax({
+				type: 'GET',
+				url: "{{url('perencanaan/pkpt/download')}}",
+				data: "nomor_pkpt="+nomor_pkpt,
+				success: function(msg){
+                    const data = msg;
+                    console.log(data)
+                    var url="{{ url('public/file_excel') }}"+'/'+data
+                    window.location = url;
 				}
 			});
 		}
