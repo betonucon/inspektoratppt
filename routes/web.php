@@ -34,6 +34,7 @@ Route::post('/logout', [LoginController::class, 'logout']);
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/', [DashboardController::class, 'index']);
     Route::get('/Dashboard', [DashboardController::class, 'index']);
+    Route::get('/dashboard-json', [DashboardController::class, 'json']);
 });
 
 Route::group(['middleware' => 'auth'], function () {
@@ -81,6 +82,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('import', [PkptController::class, 'import']);
             Route::get('/get-data', [PkptController::class, 'getdata']);
             Route::get('destroy', [PkptController::class, 'destroy']);
+            Route::get('download', [PkptController::class, 'download']);
         });
 
         Route::group(['prefix' => 'non-pkpt'], function () {
