@@ -386,7 +386,7 @@
                 confirmButtonText: 'Yes, logout!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $('#logout-form').submit()                      
+                    $('#logout-form').submit()
                 }})
              }
     </script>

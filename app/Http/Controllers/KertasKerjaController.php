@@ -61,7 +61,7 @@ class KertasKerjaController extends Controller
                 return '<a href="javascript:;" onclick="tampil_detail(`'.$data->jenis.'`)">[PKPT'.$data['id_pkpt'].']'.substr($data->area_pengawasan,0,70).'...</a>';
             })
             ->addColumn('file', function ($data) {
-                $file='<span class="btn btn-icon-only btn-outline-warning btn-sm mb-1" onclick="buka_file(`'.$data['file'].'`)"><center><img src="' . asset('public/img/pdf-file.png') . '" width="30px" height="30px"></center></span>';
+                $file='<img onclick="buka_file(`'.$data['file'].'`)" src="' . asset('public/img/pdf-file.png') . '" width="30px" height="30px">';
                 return $file;
             })
             ->addColumn('status', function ($data) {
@@ -106,7 +106,7 @@ class KertasKerjaController extends Controller
 
             $request->validate([
                 'id_pkpt' => 'required',
-                'file' => 'required||mimes:xlsx|max:2048',
+                'file' => 'required||mimes:xlsx,xls|max:2048',
             ]);
 
             $data = [
@@ -120,10 +120,7 @@ class KertasKerjaController extends Controller
                 $destinationPath = 'public/file_upload/'; // upload path
                 $profileImage = $namapkp. "." . $files->getClientOriginalExtension();
                 $files->move(public_path('/file_upload'), $profileImage);
-                $data['file'] = "$namapkp.pdf";
-                KertasKerja::create($data);
-                $result = ConvertApi::convert('pdf', ['File' =>'public/file_upload/'.$namapkp.'.xlsx']);
-                $pdf=$result->getFile()->save('public/file_upload/'.$namapkp.'.pdf');
+                $data['file'] = "$profileImage";
 
                 
             }
