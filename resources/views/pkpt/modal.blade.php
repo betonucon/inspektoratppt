@@ -2,13 +2,7 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-                <div class="mb-3">
-                    <label class="form-label">Kategori</label>
-                    <select name="id" id="id" onchange="cariKategori(this.value)" class="form-control">
-                    <option value="0">New</option>
-                    <option value="1">Edit</option>
-                    </select>
-                </div>
+                
                 <div class="mb-3" id="tampilEdit">
                     <label class="form-label">Jenis</label>
                     <select name="nomor_pkpt" id="nomor_pkpt" class="form-control">
@@ -20,6 +14,7 @@
                 </div>
                 <p class="text-muted">Upload hanya bisa untuk file berformat excell.</p>
                 <input name="file" class="form-control" type="file" multiple="multiple">
+                <input name="id" class="form-control" type="hidden" value="0">
                 <!-- end dropzon-preview -->
             </div>
             <!-- end card body -->

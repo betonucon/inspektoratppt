@@ -112,6 +112,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('download', [SuratPerintahController::class, 'download']);
             Route::get('tampil-table', [SuratPerintahController::class, 'tampiltable']);
             Route::post('store', [SuratPerintahController::class, 'store']);
+            Route::post('update', [SuratPerintahController::class, 'update']);
         });
     });
 });

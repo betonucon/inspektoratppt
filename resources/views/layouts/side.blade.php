@@ -41,15 +41,15 @@
                 <div class="collapse menu-dropdown {{ (request()->is('perencanaan*')) ? 'show' : '' }}" id="perencanaan">
                     <ul class="nav nav-sm flex-column">
                         <li class="nav-item">
-                            <a href="{{ url('perencanaan/pkpt') }}" class="nav-link {{ (request()->is('perencanaan/pkpt')) ? 'active' : '' }}" data-key="t-one-page"> Penyusunan PKPT</a>
+                            <a href="{{ url('perencanaan/pkpt') }}" class="nav-link {{ (request()->is('perencanaan/pkpt')) ? 'active' : '' }}" data-key="t-one-page"> PKPT</a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url('perencanaan/program-kerja-pengawasan') }}" class="nav-link {{ (request()->is('perencanaan/program-kerja-pengawasan')) ? 'active' : '' }}" data-key="t-nft-landing"> Penyusunan Program Kerja Pengawasan
+                            <a href="{{ url('perencanaan/program-kerja-pengawasan') }}" class="nav-link {{ (request()->is('perencanaan/program-kerja-pengawasan')) ? 'active' : '' }}" data-key="t-nft-landing"> Program Kerja Pengawasan
                             {{-- <span class="badge badge-pill bg-danger" data-key="t-new">1</span> --}}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url('perencanaan/surat-perintah') }}" class="nav-link {{ (request()->is('perencanaan/surat-perintah')) ? 'active' : '' }}" data-key="t-nft-landing"> Penerbitan Surat Perintah
+                            <a href="{{ url('perencanaan/surat-perintah') }}" class="nav-link {{ (request()->is('perencanaan/surat-perintah')) ? 'active' : '' }}" data-key="t-nft-landing"> Surat Perintah
                             {{-- <span class="badge badge-pill bg-danger" data-key="t-new">1</span> --}}
                             </a>
                         </li>
@@ -90,7 +90,7 @@
                 <div class="collapse menu-dropdown" id="Tindak_lanjut">
                     <ul class="nav nav-sm flex-column">
                         <li class="nav-item">
-                            <a href="landing.html" class="nav-link" data-key="t-one-page"> Temuan</a>
+                            <a href="landing.html" class="nav-link" data-key="t-one-page"> Tindak Lanjut Hasil Pemeriksaan</a>
                         </li>
                     </ul>
                 </div>

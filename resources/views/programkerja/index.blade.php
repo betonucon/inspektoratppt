@@ -47,8 +47,8 @@
                                         <thead>
                                             <tr>
                                                 <th width="1%" scope="col">No</th>
-                                                <th>Nomor PKPT</th>
-                                                <th>Jenis PKPT</th>
+                                                <th>Area Pengawasan</th>
+                                                {{-- <th>Jenis PKPT</th> --}}
                                                 <th>PKP</th>
                                                 <th>Nota Dinas</th>
                                                 <th>Status</th>
@@ -184,7 +184,7 @@
                         }
                     },
                     { data: 'area_pengawasannya' },
-                    { data: 'jenis' },
+                    // { data: 'jenis' },
                     { data: 'pkp' },
                     { data: 'nota_dinas' },
                     { data: 'status' },

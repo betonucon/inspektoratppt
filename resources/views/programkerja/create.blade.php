@@ -12,7 +12,7 @@
             <div class="card-body">
                 <form id="form-data" method="post" action="{{ url('perencanaan/program-kerja-pengawasan/store') }}" enctype="multipart/form-data">
                     @csrf
-                    <div class="mb-3">
+                    {{-- <div class="mb-3">
                         <label class="form-label">PKPT</label>
                         <select class="form-control"  name="jenis"  id="jenis" onchange="getTable(this.value)">
                             <option value=""> --Pilih-- </option>
@@ -20,7 +20,7 @@
                             <option value="{{ $o->nomor_pkpt }}">{{ $o->nomor_pkpt }} </option>
                         @endforeach
                         </select>
-                    </div>
+                    </div> --}}
 
                     <div class="mb-3">
                         <label class="form-label">PKP</label>
@@ -164,10 +164,10 @@
     });
 </script>
 <script>
-      function getTable(jenis){
-            var table=$('#data-table-fixed-header').DataTable();
-			table.ajax.url("{{ url('perencanaan/program-kerja-pengawasan/getTable')}}?jenis="+jenis).load();
-        }
+    //   function getTable(jenis){
+    //         var table=$('#data-table-fixed-header').DataTable();
+	// 		table.ajax.url("{{ url('perencanaan/program-kerja-pengawasan/getTable')}}?jenis="+jenis).load();
+    //     }
 
         var handleDataTableFixedHeader = function() {
         "use strict";
