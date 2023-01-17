@@ -18,6 +18,11 @@ class SuratPerintahController extends Controller
         return view('suratperintah.index', compact('headermenu', 'menu'));
     }
 
+    public function modal(Request $request){
+        $data = ProgramKerja::where('id', $request->id)->first();
+        return view('suratperintah.modal', compact('data'));
+    }
+
     public function download(Request $request)
     {
         $data = ProgramKerja::where('id', $request->id)->get();

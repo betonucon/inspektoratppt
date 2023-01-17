@@ -14,7 +14,7 @@
                                     @endphp
                                     <tr>
                                         <th width="1%">No</th>
-                                        <th>Jenis</th>
+                                        {{-- <th>Jenis</th> --}}
                                         <th width="30%">Area Pengawasan</th>
                                         <th width="30%">Jenis Pengawasan</th>
                                         <th >OPD</th>
@@ -38,7 +38,7 @@
                                     {{-- @foreach ($data as $d) --}}
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $data->jenis }}</td>
+                                            {{-- <td>{{ $data->jenis }}</td> --}}
                                             <td width="30%">{{ $data->area_pengawasan }}</td>
                                             <td width="30%">{{ $data->jenis_pengawasan }}</td>
                                             <td>{{ $data->opd }}</td>

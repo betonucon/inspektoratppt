@@ -359,6 +359,19 @@
         });
     });
 
+    function tambah(id){
+        $('#btn-save').removeAttr('disabled','false');
+        $.ajax({
+            type: 'GET',
+            url: "{{url('master-data/opd/modal')}}",
+            data: "id="+id,
+            success: function(msg){
+                $('#tampil-form').html(msg);
+                $('#modalAdd').modal('show');
+            }
+        });
+    }
+
     $('#btn-refused').on('click', () => {
     var form=document.getElementById('form-refused');
         $.ajax({
