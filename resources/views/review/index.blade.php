@@ -105,7 +105,11 @@
                 responsive: true,
                 ajax:"{{ url('pelaporan/review/get-data')}}",
                 columns: [
-                    { data: 'id' },
+                    { data: 'id', render: function (data, type, row, meta)
+                        {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
                     { data: 'area_pengawasan' },
                     { data: 'jenis_pengawasan' },
                     { data: 'opd' },

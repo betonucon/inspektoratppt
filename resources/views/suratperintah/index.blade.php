@@ -38,8 +38,6 @@
                                                 <th >PKP</th>
                                                 <th >Nota Dinas</th>
                                                 <th >Surat Perintah</th>
-                                                {{-- <th width="5%" >Download</th> --}}
-                                                
                                             </tr>
                                         </thead>
 									</table>
@@ -77,7 +75,6 @@
 			<div class="modal-dialog modal-xl">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabelDefault">{{ $menu }}</h5>
 						<button type="button" class="btn-close" data-bs-dismiss="modal"
 								aria-label="Close">
 						</button>
@@ -89,10 +86,7 @@
 							<div id="tampil-table"></div>
 						</form>
 					</div>
-					<div class="modal-footer">
-						<button  class="btn btn-white" onclick="hide()">Tutup</button>
-						<button id="btn-refused"  class="btn btn-success">Simpan</button>
-					</div>
+
 				</div>
 			</div>
 		</div>
@@ -119,13 +113,37 @@
 				</div>
 			</div>
 		</div>
+
+        <!-- Nomor SP -->
+        <div class="modal fade" id="tampilSp" role="dialog" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						{{-- <h5 class="modal-title" id="exampleModalLabelDefault">{{ $menu }}</h5> --}}
+						<button type="button" class="btn-close" data-bs-dismiss="modal"
+								aria-label="Close">
+						</button>
+					</div>
+					<div class="modal-body" style="max-height: calc(100vh - 210px);overflow-y: auto;">
+						<div id="error-notif"></div>
+						<form id="upload" enctype="multipart/form-data">
+							@csrf
+							<div id="table-sp"></div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button  class="btn btn-white" onclick="hide()">Tutup</button>
+						<button id="btn-refused"  class="btn btn-success">Simpan</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 @endsection
 
 @push('ajax')
 <script text="">
-
         var handleDataTableFixedHeader = function() {
         "use strict";
         if ($('#data-table-fixed-header').length !== 0) {
@@ -147,8 +165,7 @@
                { data: 'jenis' },
                { data: 'pkp' },
                { data: 'nota_dinas' },
-               { data: 'upload' },
-            //    { data: 'action' },
+               { data: 'no_sp' },
            ],
            language: {
                paginate: {
@@ -176,56 +193,6 @@
 </script>
 
 <script>
-    $(document).ready(function(){
-        $(document).on('change', '#profile-img-file-input', function(){
-            var name = document.getElementById("profile-img-file-input").files[0].name;
-            var form_data = new FormData(document.getElementById('upload'));
-            var ext = name.split('.').pop().toLowerCase();
-            if(jQuery.inArray(ext, ['gif','png','jpg','jpeg','pdf']) == -1){
-                alert("Invalid Image File");
-            }
-            var oFReader = new FileReader();
-            oFReader.readAsDataURL(document.getElementById("profile-img-file-input").files[0]);
-            var f = document.getElementById("profile-img-file-input").files[0];
-            var fsize = f.size||f.fileSize;
-            if(fsize > 2000000){
-                alert("Image File Size is very big");
-            }else{
-                form_data.append("surat_perintah", document.getElementById('profile-img-file-input').files[0]);
-                $.ajax({
-                    url:"{{ url('perencanaan/surat-perintah/update') }}",
-                    method:"POST",
-                    data: form_data,
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    beforeSend:function(){
-                    $('#output').html("<label class='text-success'>Image Uploading...</label>");
-                    },   
-                    success:function(msg){                      
-                        // if(msg=='success'){
-                            location.reload();
-                            Swal.fire(
-                            'Successful!',
-                            'Data Berhasil Disimpan',
-                            'success'
-                            )
-                            
-                            
-                        // }else{
-                        //     Swal.fire({
-                        //     icon: 'error',
-                        //     title: 'Oops Error !',
-                        //     html: msg,
-                        //     footer: ''
-                        //     })
-                        //     $('#error-notif').html(msg);
-                        // }
-                    }
-                });
-            }
-        });
-    });
 
     function download(id){
         location.href = "{{ url('perencanaan/surat-perintah/download?id=') }}"+id;
@@ -252,6 +219,21 @@
             }
         });
     }
+
+    function tampil_sp(id){
+			$('#btn-save').removeAttr('disabled','false');
+			$.ajax({
+				type: 'GET',
+				url: "{{url('perencanaan/program-kerja-pengawasan/tampil-sp')}}",
+				data: "id="+id,
+				success: function(msg){
+					$('#tampil-sp').html(msg);
+					$('#tampilSp').modal('show');
+
+				}
+			});
+		}
+
 </script>
 
 @endpush

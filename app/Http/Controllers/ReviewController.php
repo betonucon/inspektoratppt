@@ -27,9 +27,6 @@ class ReviewController extends Controller
         $data = Pkpt::where('jenis_pengawasan', 'reviu')->orderBy('id', 'desc')->get();
 
         return Datatables::of($data)
-            ->addColumn('id', function ($data) {
-                return 'PKPT ' . $data['id'];
-            })
             ->addColumn('area_pengawasan', function ($data) {
                 return $data['area_pengawasan'];
             })

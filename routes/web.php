@@ -111,6 +111,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('create', [SuratPerintahController::class, 'create']);
             Route::get('download', [SuratPerintahController::class, 'download']);
             Route::get('tampil-table', [SuratPerintahController::class, 'tampiltable']);
+            Route::get('tampil-sp', [SuratPerintahController::class, 'tampilSp']);
             Route::post('store', [SuratPerintahController::class, 'store']);
             Route::post('update', [SuratPerintahController::class, 'update']);
         });
